@@ -35,7 +35,8 @@ func (m *Media) AddOptions(options string) (error) {
 	defer C.free(unsafe.Pointer(cOptions))
 
 	C.libvlc_media_add_option(m.media, cOptions)
-	return nil
+	
+	return getError()
 }
 
 // NewMediaFromPath creates a Media instance from the provided path.
