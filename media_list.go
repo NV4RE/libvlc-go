@@ -139,7 +139,7 @@ func (ml *MediaList) ClearList(keep uint) error {
 		return nil
 	}
 
-	for i := size - 1; i > int(keep); i-- {
+	for i := size - 1; i >= int(keep); i-- {
 		if err := ml.RemoveAtIndex(i); err != nil {
 			return err
 		}
