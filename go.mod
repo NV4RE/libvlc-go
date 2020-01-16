@@ -1,1 +1,3 @@
-module github.com/adrg/libvlc-go
+module github.com/NV4RE/libvlc-go
+
+go 1.13

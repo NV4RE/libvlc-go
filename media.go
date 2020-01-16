@@ -29,6 +29,15 @@ type Media struct {
 	media *C.libvlc_media_t
 }
 
+// AddOptions add options to media 
+func (m *Media) AddOptions(options string) (error) {
+	cOptions := C.CString(options)
+	defer C.free(unsafe.Pointer(cOptions))
+
+	C.libvlc_media_add_option(m.media, cOptions)
+	return nil
+}
+
 // NewMediaFromPath creates a Media instance from the provided path.
 func NewMediaFromPath(path string) (*Media, error) {
 	return newMedia(path, true)
