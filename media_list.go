@@ -104,3 +104,42 @@ func (ml *MediaList) EventManager() (*EventManager, error) {
 
 	return newEventManager(manager), nil
 }
+
+
+// Size get list size
+// List must be locked
+func (ml *MediaList) Size() (int, error) {
+	cResult := C.libvlc_media_list_count(ml.list)
+
+	return int(cResult), getError()
+}
+
+// RemoveAtIndex remove item from list
+// List must be locked
+func (ml *MediaList) RemoveAtIndex(index int) error {
+	cIndex := C.int(index)
+	cResult := C.libvlc_media_list_remove_index(ml.list ,cIndex)
+
+	if (int(cResult) == 0) {
+		return nil
+	}
+
+	return errors.New("could not remove from list")
+}
+
+// ClearList cleanup list
+// List must be locked
+func (ml *MediaList) ClearList() error {
+	size, err := ml.Size()
+	if (err != nil) {
+		return err
+	}
+
+	for i := 0; i < size; i++ {
+		if err := ml.RemoveAtIndex(0); err != nil {
+			return err
+		}
+	}
+
+	return nil
+}
