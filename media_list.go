@@ -129,18 +129,18 @@ func (ml *MediaList) RemoveAtIndex(index int) error {
 
 // ClearList cleanup list
 // List must be locked
-func (ml *MediaList) ClearList(keep int) error {
+func (ml *MediaList) ClearList(keep uint) error {
 	size, err := ml.Size()
 	if (err != nil) {
 		return err
 	}
 
-	if (size <= keep) {
+	if (size <= int(keep)) {
 		return nil
-	} 
+	}
 
-	for i := 0; i < size - keep; i++ {
-		if err := ml.RemoveAtIndex(0); err != nil {
+	for i := int(keep); i < size; i++ {
+		if err := ml.RemoveAtIndex(i); err != nil {
 			return err
 		}
 	}
