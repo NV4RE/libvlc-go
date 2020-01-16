@@ -29,13 +29,13 @@ type Media struct {
 	media *C.libvlc_media_t
 }
 
-// AddOptions add options to media 
-func (m *Media) AddOptions(options string) (error) {
+// AddOptions add options to media
+func (m *Media) AddOptions(options string) error {
 	cOptions := C.CString(options)
 	defer C.free(unsafe.Pointer(cOptions))
 
 	C.libvlc_media_add_option(m.media, cOptions)
-	
+
 	return getError()
 }
 
@@ -81,4 +81,20 @@ func newMedia(path string, local bool) (*Media, error) {
 	}
 
 	return &Media{media: media}, nil
+}
+
+// NewMediaWithOptions create media instance with options
+func NewMediaWithOptions(path string, local bool, options ...string) (*Media, error) {
+	media, err := newMedia(path, local)
+	if err != nil {
+		return nil, err
+	}
+
+	for _, option := range options {
+		if err := media.AddOptions(option); err != nil {
+			return nil, err
+		}
+	}
+
+	return media, nil
 }
